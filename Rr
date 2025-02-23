@@ -1,0 +1,10 @@
+import { useState } from "react";
+
+export default function MonsterLineup() { const [monster, setMonster] = useState(""); const [lineup, setLineup] = useState(null); const [error, setError] = useState(null);
+
+const fetchLineup = async () => { setError(null); setLineup(null); try { const response = await fetch(http://localhost:5000/lineup?monster=${monster}); const data = await response.json(); if (data.error) { setError(data.error); } else { setLineup(data.recommended_lineup); } } catch (err) { setError("Failed to fetch lineup. Check your server."); } };
+
+return ( <div className="p-4 max-w-lg mx-auto"> <h1 className="text-xl font-bold mb-4">Lords Mobile Monster Lineup</h1> <input type="text" className="border p-2 w-full rounded mb-2" placeholder="Enter monster name" value={monster} onChange={(e) => setMonster(e.target.value)} /> <button
+className="bg-blue-500 text-white px-4 py-2 rounded"
+onClick={fetchLineup}
+> Get Lineup </button> {error && <p className="text-red-500 mt-2">{error}</p>} {lineup && ( <div className="mt-4 p-4 border rounded"> <h2 className="text-lg font-bold">Recommended Lineup:</h2> <ul className="list-disc ml-5"> {lineup.map((hero, index) => ( <li key={index}>{hero}</li> ))} </ul> </div> )} </div> ); }
